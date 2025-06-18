@@ -1,4 +1,4 @@
-package com.acme.nutrimove.messagebroker;
+package com.acme.nutrimove.messagebroker.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Queue;
@@ -10,28 +10,36 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
+    // Cola para las recomendaciones
     @Bean
     public Queue recommendationQueue() {
         return new Queue("recommendationQueue", true);
     }
 
+    // Cola para las notificaciones
     @Bean
     public Queue notificationQueue() {
         return new Queue("notificationQueue", true);
     }
 
+    // Intercambio de tipo Topic
     @Bean
     public TopicExchange exchange() {
         return new TopicExchange("myExchange");
     }
 
+
     @Bean
     public Binding recommendationBinding(Queue recommendationQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(recommendationQueue).to(exchange).with("recommendation.routing.key");
+        return BindingBuilder.bind(recommendationQueue)
+                .to(exchange)
+                .with("recommendation.routing.key");
     }
 
     @Bean
     public Binding notificationBinding(Queue notificationQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(notificationQueue).to(exchange).with("notification.routing.key");
+        return BindingBuilder.bind(notificationQueue)
+                .to(exchange)
+                .with("notification.routing.key");
     }
 }

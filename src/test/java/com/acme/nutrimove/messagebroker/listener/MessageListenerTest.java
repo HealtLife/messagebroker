@@ -1,4 +1,4 @@
-package com.acme.nutrimove.messagebroker;
+package com.acme.nutrimove.messagebroker.listener;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
