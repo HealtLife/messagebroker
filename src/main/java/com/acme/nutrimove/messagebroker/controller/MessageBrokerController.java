@@ -11,9 +11,9 @@ public class MessageBrokerController {
 
     @Autowired
     private MessageSender messageSender;
+
     @PostMapping("/message-broker/send")
     public void sendMessage(@RequestBody String message) {
-        // Llamar al método de MessageSender para enviar el mensaje a RabbitMQ
-        messageSender.sendMessage(message, "recommendation.routing.key");  // Clave de enrutamiento para recomendaciones
+        messageSender.sendMessage(message, "notification.routing.key");
     }
 }

@@ -13,10 +13,10 @@ public class MessageListener {
         this.messageProcessor = messageProcessor;
     }
 
-    @RabbitListener(queues = "recommendationQueue")
+    /*@RabbitListener(queues = "recommendationQueue")
     public void receiveRecommendation(String message) {
         messageProcessor.processRecommendation(message);
-    }
+    }*/
 
     @RabbitListener(queues = "notificationQueue")
     public void receiveNotification(String message) {

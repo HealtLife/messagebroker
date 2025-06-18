@@ -1,5 +1,9 @@
 package com.acme.nutrimove.messagebroker.service;
 
+import com.acme.nutrimove.messagebroker.dto.NotificationDto;
+import com.acme.nutrimove.messagebroker.feign.FeignApiGatewayClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,35 +11,31 @@ import java.util.Map;
 @Service
 public class MessageProcessor {
 
-    private final NotificationService notificationService;
 
-    public MessageProcessor(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
 
-    public void processRecommendation(String message) {
-        // Procesa la recomendación
-        System.out.println("Processing recommendation: " + message);
+    @Autowired
+    private StoredNotificationService storedNotificationService;
 
-        // Enviar notificación de recomendación
-        notificationService.sendRecommendationNotification(message);
+    @Autowired
+    private FeignApiGatewayClient apiGatewayClient;
 
-        // Lógica adicional (si se requiere, por ejemplo, guardar en base de datos)
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void processNotification(String message) {
-        // Procesa la notificación
-        System.out.println("Processing notification: " + message);
+        try {
+            // Convertir el mensaje JSON a DTO
+            NotificationDto dto = objectMapper.readValue(message, NotificationDto.class);
 
-        // Lógica para enviar una notificación (como un correo electrónico, SMS, etc.)
-        sendNotification(message);
+            // Guardar primero en la base de datos
+            storedNotificationService.receiveNotification(dto);
 
-        // Lógica adicional (si se requiere, por ejemplo, actualizar registros en la base de datos)
-    }
+            // Enviar al API Gateway
+            apiGatewayClient.forwardNotification(dto);
 
-    private void sendNotification(String message) {
-        // Simula el envío de una notificación
-        System.out.println("Sending notification: " + message);
-        // Aquí se puede integrar con un sistema de notificación real (SMS, correo electrónico, etc.)
+            System.out.println("Notificación procesada y enviada al API Gateway.");
+
+        } catch (Exception e) {
+            System.err.println("Error procesando notificación: " + e.getMessage());
+        }
     }
 }
