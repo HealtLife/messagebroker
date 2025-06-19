@@ -13,7 +13,7 @@ import java.sql.*;
 public class MessageBrokerApplication {
 
     public static void main(String[] args) {
-        createDatabaseIfNotExists("jdbc:postgresql://localhost:5432/", "postgres", "renato", "nutrimove_messagebroker");
+        createDatabaseIfNotExists("jdbc:postgresql://localhost:5432/", "postgres", "12345678", "nutrimove_messagebroker");
         SpringApplication.run(MessageBrokerApplication.class, args);
 
     }
