@@ -25,8 +25,6 @@ public class RabbitConfig {
     }
 
 
-
-
     @Bean
     public Binding notificationBinding(Queue notificationQueue, TopicExchange exchange) {
         return BindingBuilder.bind(notificationQueue)
